@@ -1,109 +1,159 @@
-import {React ,useState} from 'react';
+import { React, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Serverurl } from '../main';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '../redux/userSlice';
+import { motion } from 'framer-motion';
+import { HiOutlineMail, HiOutlineLockClosed, HiOutlineUser, HiEye, HiEyeOff } from 'react-icons/hi';
 
 function SignUp() {
-  let navigate = useNavigate();
-  let [show,setShow] =useState(false);
-  let [userName,setuserName]= useState("");
-  let [email,setEmail]= useState("");
-  let [password,setPassword]= useState("");
-  let [loading,setLoading]= useState(false);
-  let [err,setErr]= useState("");
-  let dispatch = useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
+  const [userName, setuserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
 
   const handleSignup = async () => {
     if (!userName || !email || !password) {
-    alert("Please fill all fields");
-    return;
-  }
+      setErr("Please fill all fields");
+      return;
+    }
 
     setLoading(true);
+    setErr("");
     try {
-      let result = await axios.post(`${Serverurl}/api/auth/signup`, {
-        username: userName,email : email,password:password
+      const result = await axios.post(`${Serverurl}/api/auth/signup`, {
+        username: userName, email: email, password: password
       }, {
         withCredentials: true
       });
       setLoading(false);
-      console.log("result is be like : ", result);
       dispatch(setUserData(result.data));
       setuserName("");
       setEmail("");
       setPassword("");
-      setErr("");
-
-      if(result.status === 201){
-        alert("Signup Successful");
-              navigate("/login");
+      
+      if (result.status === 201) {
+        navigate("/login");
       }
     } catch (error) {
-      setErr(error.response.data.message);
+      setErr(error.response?.data?.message || "Signup failed. Please try again.");
       setLoading(false);
-      console.log("Signup error", error); 
+      console.log("Signup error", error);
     }
   }
+
   return (
-    <div className='w-full h-[100vh] bg-slate-200 flex flex-col justify-center items-center'>
-      <div className='w-full max-w-[500px] h-[600px] bg-white rounded-lg
-      shadow-gray-400 flex flex-col gap-[30px] shadow-lg'>
-        <div className='w-full h-[200px] bg-[#20c7ff] rounded-b-[30%]
-        shadow-gray-400 shadow-lg flex justify-center items-center'>
-                <h1 className='text-gray-600 font-bold text-[30px]'>Welcome to  
-                <span className='text-white p-2'>chatly</span></h1>
+    <div className='relative min-h-screen w-full flex items-center justify-center overflow-hidden px-4'>
+      <div className="mesh-gradient" />
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className='w-full max-w-[480px] glass p-8 md:p-10 rounded-[2.5rem] flex flex-col gap-8 relative z-10'
+      >
+        <div className='text-center'>
+          <motion.h1
+            initial={{ y: -20 }}
+            animate={{ y: 0 }}
+            className='text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200'
+          >
+            Create Account
+          </motion.h1>
+          <p className='text-indigo-200 mt-2 text-sm opacity-80'>Join the conversation today</p>
         </div>
-        <form className='w-full flex flex-col justify-center items-center gap-[20px]'
-        onSubmit = {(e => {
-          e.preventDefault();
-          handleSignup();
-        })}
+
+        <form className='flex flex-col gap-5'
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSignup();
+          }}
         >
-        <input type="text" placeholder='Username' className='w-[90%] h-[50px] text-left px-[20px] py-[10px] rounded-[5px] outline-none
-        border-2 border-[#20c7ff] shadow-lg shadow-gray-200 text-gray-700'
-          onChange={(er) => {
-            setuserName(er.target.value)
-          }}
-          value={userName}
-        />
-        <input type="email" placeholder='Email' className='w-[90%] h-[50px] text-left px-[20px] py-[10px] rounded-[5px] outline-none
-        border-2 border-[#20c7ff] shadow-lg shadow-gray-200 text-gray-700'
-          onChange={(er) => {
-            setEmail(er.target.value)
-          }}
-          value={email}
-        />
-        <div className='relative w-[90%] h-[50px]'>
-            <input type={show ? 'text' : 'password'} placeholder='Password' className='w-full h-full text-left px-[20px] py-[10px] rounded-[5px] outline-none
-        border-2 border-[#20c7ff] shadow-lg shadow-gray-200 text-gray-700'
-          onChange={(er) => {
-            setPassword(er.target.value)
-          }}
-          value={password}
-        />
+          <div className='relative group'>
+            <HiOutlineUser className='absolute left-4 top-1/2 -translate-y-1/2 text-xl text-indigo-300 group-focus-within:text-white transition-colors' />
+            <input
+              type="text"
+              placeholder='Username'
+              className='input-field pl-12'
+              onChange={(e) => setuserName(e.target.value)}
+              value={userName}
+              required
+            />
+          </div>
 
-        <span className='absolute top-[10px] right-[10px] text-[19px] cursor-pointer text-[#20c7ff] font-[semibold]'
-        onClick={() => setShow(prev => !prev)}
-        >{show? 'hide' : 'show'}</span>
-        </div> 
+          <div className='relative group'>
+            <HiOutlineMail className='absolute left-4 top-1/2 -translate-y-1/2 text-xl text-indigo-300 group-focus-within:text-white transition-colors' />
+            <input
+              type="email"
+              placeholder='Email Address'
+              className='input-field pl-12'
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              required
+            />
+          </div>
 
-        {err && <p className='text-red-500'>{err}</p>}
-        
-       
-        <button className='bg-[#20c7ff] rounded-2xl shadow-gray-400
-        shadow-lg width-[200px] px-[20px] py-[10px] font-semibold hover:shadow-inner
-        disabled={loading}'>
-        {loading ? "Loading..." : "Sign up"}  </button>
-        <p onClick={() => navigate("/login")}>Already Have An Account ? <span 
-        
-        className='text-[bold]  text-[#20c7ff] hover:underline cursor-pointer'>Login</span></p>
-      </form>
-      </div>
-      
+          <div className='relative group'>
+            <HiOutlineLockClosed className='absolute left-4 top-1/2 -translate-y-1/2 text-xl text-indigo-300 group-focus-within:text-white transition-colors' />
+            <input
+              type={show ? 'text' : 'password'}
+              placeholder='Password'
+              className='input-field pl-12 pr-12'
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+            />
+            <button
+              type="button"
+              className='absolute right-4 top-1/2 -translate-y-1/2 text-xl text-indigo-300 hover:text-white transition-colors'
+              onClick={() => setShow(prev => !prev)}
+            >
+              {show ? <HiEyeOff /> : <HiEye />}
+            </button>
+          </div>
+
+          {err && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className='text-red-400 text-sm font-medium text-center'
+            >
+              {err}
+            </motion.p>
+          )}
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            disabled={loading}
+            className='btn-primary mt-4'
+          >
+            {loading ? "Creating Account..." : "Sign up"}
+          </motion.button>
+
+          <p className='text-center text-sm text-indigo-200 mt-2'>
+            Already have an account?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              className='text-white font-bold hover:underline cursor-pointer transition-all'
+            >
+              Login
+            </span>
+          </p>
+        </form>
+      </motion.div>
+
+      {/* Decorative elements */}
+      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600 rounded-full blur-[120px] opacity-20" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600 rounded-full blur-[120px] opacity-20" />
     </div>
   )
 }
 
 export default SignUp
+

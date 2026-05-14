@@ -8,7 +8,8 @@ export const getCurrentUser = async(req,res) => {
             return res.status(401).json({message: "Unauthorized hai bhai "});
         }
 
-        let user = await User.findById(userId).select("-password");
+        let user = await User
+        .findById(userId).select("-password");
         if(!user){ 
             return res.status(404).json({message: "User not found"});
         }
