@@ -26,8 +26,8 @@ function Login() {
             }, {
                 withCredentials: true
             });
-            dispatch(setUserData(result.data));
-            navigate("/");
+            dispatch(setUserData(result.data.user));
+            navigate("/profile");
             setLoading(false);
         } catch (error) {
             setLoading(false);
@@ -39,15 +39,15 @@ function Login() {
     return (
         <div className='relative min-h-screen w-full flex items-center justify-center overflow-hidden px-4'>
             <div className="mesh-gradient" />
-            
-            <motion.div 
+
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className='w-full max-w-[450px] glass p-8 md:p-10 rounded-[2.5rem] flex flex-col gap-8 relative z-10'
             >
                 <div className='text-center'>
-                    <motion.h1 
+                    <motion.h1
                         initial={{ scale: 0.9 }}
                         animate={{ scale: 1 }}
                         className='text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-indigo-200'
@@ -65,9 +65,9 @@ function Login() {
                 >
                     <div className='relative group'>
                         <HiOutlineMail className='absolute left-4 top-1/2 -translate-y-1/2 text-xl text-indigo-300 group-focus-within:text-white transition-colors' />
-                        <input 
-                            type="email" 
-                            placeholder='Email Address' 
+                        <input
+                            type="email"
+                            placeholder='Email Address'
                             className='input-field pl-12'
                             onChange={(e) => setEmail(e.target.value)}
                             value={email}
@@ -77,9 +77,9 @@ function Login() {
 
                     <div className='relative group'>
                         <HiOutlineLockClosed className='absolute left-4 top-1/2 -translate-y-1/2 text-xl text-indigo-300 group-focus-within:text-white transition-colors' />
-                        <input 
-                            type={show ? 'text' : 'password'} 
-                            placeholder='Password' 
+                        <input
+                            type={show ? 'text' : 'password'}
+                            placeholder='Password'
                             className='input-field pl-12 pr-12'
                             onChange={(e) => setPassword(e.target.value)}
                             value={password}
@@ -97,7 +97,7 @@ function Login() {
                     </div>
 
                     {err && (
-                        <motion.p 
+                        <motion.p
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             className='text-red-400 text-sm font-medium text-center'
@@ -106,7 +106,7 @@ function Login() {
                         </motion.p>
                     )}
 
-                    <motion.button 
+                    <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         disabled={loading}
@@ -126,7 +126,7 @@ function Login() {
 
                     <p className='text-center text-sm text-indigo-200 mt-4'>
                         Don't have an account?{" "}
-                        <span 
+                        <span
                             onClick={() => navigate("/signup")}
                             className='text-white font-bold hover:underline cursor-pointer transition-all'
                         >

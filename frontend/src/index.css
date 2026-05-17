@@ -55,3 +55,21 @@ body {
     radial-gradient(at 50% 100%, hsla(225,39%,30%,1) 0, transparent 50%), 
     radial-gradient(at 100% 100%, hsla(253,16%,7%,1) 0, transparent 50%);
 }
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
