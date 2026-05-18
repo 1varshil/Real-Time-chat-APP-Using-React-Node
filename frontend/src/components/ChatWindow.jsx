@@ -1,15 +1,25 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HiOutlineDotsVertical, HiOutlinePaperClip } from 'react-icons/hi';
+import { HiOutlineDotsVertical, HiOutlinePaperClip, HiOutlineArrowLeft } from 'react-icons/hi';
 import { IoSend } from 'react-icons/io5';
 import Avatar from './Avatar';
+import DefaultImg from '../assets/default-user.png';
 
-const ChatWindow = ({ activeChat }) => {
+const getInitials = (name) => {
+  if (!name) return '?';
+  const parts = name.trim().split(/\s+/);
+  if (parts.length > 1) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase();
+};
+
+const ChatWindow = ({ activeChat, onBack }) => {
   const [message, setMessage] = useState('');
 
   if (!activeChat) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-gray-50 text-gray-400">
+      <div className="flex-1 hidden md:flex flex-col items-center justify-center bg-gray-50 text-gray-400">
         <p className="text-lg font-medium">Select a conversation to start chatting</p>
       </div>
     );
@@ -20,10 +30,16 @@ const ChatWindow = ({ activeChat }) => {
       {/* Chat Header */}
       <div className="px-6 py-3 border-b border-gray-200 flex items-center justify-between bg-white">
         <div className="flex items-center gap-4">
+          <button 
+            onClick={onBack} 
+            className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-all text-gray-600 mr-1 flex items-center justify-center"
+          >
+            <HiOutlineArrowLeft className="text-xl" />
+          </button>
           <Avatar
-            src={activeChat.image}
-            initials={(activeChat.name || activeChat.username)?.charAt(0) || '?'}
-            isOnline={activeChat.isOnline}
+            src={activeChat.image || DefaultImg}
+            initials={getInitials(activeChat.name || activeChat.username)}
+            isOnline={activeChat.isOnline !== undefined ? activeChat.isOnline : true}
             size="h-10 w-10"
           />
           <div>

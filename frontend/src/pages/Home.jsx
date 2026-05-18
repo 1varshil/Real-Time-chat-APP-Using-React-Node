@@ -66,7 +66,7 @@ function Home() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-full h-full md:h-[100vh] bg-white rounded-none md:rounded-xl flex overflow-hidden border border-gray-200 shadow-xl relative z-10"
+        className="w-full max-w-full h-screen md:h-[100vh] bg-white rounded-none md:rounded-xl flex overflow-hidden border border-gray-200 shadow-xl relative z-10"
       >
         <ChatSidebar
           // conversations={DUMMY_CONVERSATIONS}
@@ -74,9 +74,12 @@ function Home() {
           activeChat={activeChat}
           onChatSelect={setActiveChat}
         />
-        <ChatWindow activeChat={activeChat} />
+        <ChatWindow activeChat={activeChat} onBack={() => setActiveChat(null)} />
 
-        <button className='absolute bottom-2 left-3 text-gray-500 hover:text-red-500 transition-colors z-20 bg-blue p-2 rounded-full shadow-md'
+        <button 
+          className={`absolute bottom-2 left-3 text-gray-500 hover:text-red-500 transition-colors z-20 bg-blue p-2 rounded-full shadow-md ${
+            activeChat ? 'hidden md:block' : 'block'
+          }`}
           onClick={handleLogout}
         >
           <FiLogOut size={24} />
